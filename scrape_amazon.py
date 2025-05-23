@@ -1,43 +1,47 @@
 import os
 import time
 import random
+import argparse
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.edge.options import Options
 from fake_useragent import UserAgent
 
-# === Setup ===
+# === Argument Parser ===
+parser = argparse.ArgumentParser(description="Scrape Amazon product listings.")
+parser.add_argument("--query", type=str, required=True, help="Search query (e.g., laptops, mobiles)")
+parser.add_argument("--pages", type=int, default=10, help="Number of pages to scrape")
+args = parser.parse_args()
 
-# Load proxies from proxy.txt
-# with open('proxy.txt') as f:
-#     proxy_list = [line.strip() for line in f if line.strip()]
+query = args.query
+pages = args.pages
 
-# # Pick a random proxy
-# proxy = random.choice(proxy_list)
+# === Prepare output directory ===
+base_dir = 'amazon_products'
+output_dir = os.path.join(base_dir, query)
 
-# Generate a random user-agent
+# Ensure base_dir is a directory, not a file
+if os.path.exists(base_dir) and not os.path.isdir(base_dir):
+    print(f" Error: {base_dir} exists and is not a directory.")
+    exit(1)
+
+# Make the output subdirectory
+os.makedirs(output_dir, exist_ok=True)
+
+# === Setup WebDriver ===
 ua = UserAgent()
 user_agent = ua.random
 
-# Configure Edge options
 options = Options()
-#options.add_argument(f'--proxy-server=http://{proxy}')
 options.add_argument(f'user-agent={user_agent}')
 options.add_argument('--disable-blink-features=AutomationControlled')
 options.add_argument('--disable-infobars')
 options.add_experimental_option("excludeSwitches", ["enable-automation"])
 options.add_experimental_option('useAutomationExtension', False)
 
-# Start Edge
 driver = webdriver.Edge(options=options)
 
 # === Scraping Logic ===
-
-query = 'laptops'
-pages = 10
-output_dir = 'amazon_products'
-os.makedirs(output_dir, exist_ok=True)
-
 for pageNum in range(1, pages + 1):
     url = f"https://www.amazon.in/s?k={query}&page={pageNum}&ref=nb_sb_noss"
     print(f"Scraping page: {url}")
