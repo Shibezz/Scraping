@@ -1,0 +1,21 @@
+{
+  "laptops": {
+    "include": [
+      "laptop", "notebook", "intel", "amd", "dell", "hp", "asus", "lenovo",
+      "acer", "macbook", "chromebook", "15-inch", "14-inch", "13-inch", "gaming"
+    ],
+    "exclude": [
+      "bag", "cover", "sleeve", "mouse", "keyboard", "adapter", "charger",
+      "case", "stand", "tablet", "toy"
+    ]
+  },
+  "mobiles": {
+    "include": [
+      "smartphone", "mobile", "android", "iphone", "samsung", "oneplus",
+      "xiaomi", "realme", "oppo", "vivo", "5g"
+    ],
+    "exclude": [
+      "case", "cover", "screen protector", "charger", "cable", "earphones", "toy"
+    ]
+  }
+}
